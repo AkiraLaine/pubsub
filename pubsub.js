@@ -3,19 +3,22 @@
   by Akira Laine
 */
 
-var events = {
+const events = {
   events: {},
-  on: function (event, fn) {
+  on (event, fn) {
     this.events[event] = this.events[event] || []
     this.events[event].push(fn)
   },
-  off: function (event, fn) {
-    var functionIndex = this.events[event].indexOf(fn)
+  off (event, fn) {
+    const functionIndex = this.events[event].indexOf(fn)
     if (functionIndex > -1) this.events[event].splice(functionIndex, 1)
+    if (!this.events[event].length) delete this.events[event]
   },
-  emit: function (event, data) {
-    this.events[event].forEach(fn => {
-      fn(data)
-    })
+  emit (event, data) {
+    if (this.events[event]) {
+      this.events[event].forEach(fn => {
+        fn(data)
+      })
+    }
   }
 }
